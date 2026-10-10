@@ -1,24 +1,7 @@
 from datetime import datetime
-from typing import Literal
 
-from pydantic import BaseModel
-
-
-class ChatMessage(BaseModel):
-    id: str
-    content: str
-    type: Literal["user", "system"]
-    session_id: str
-    timestamp: datetime
-
-
-class ChatSession(BaseModel):
-    id: str
-    title: str
-    messages: list[ChatMessage] = []
-    created_at: datetime
-    updated_at: datetime
-
+from server.schema.message import ChatMessage
+from server.schema.session import ChatSession
 
 fake_chat_history = [
     ChatMessage(

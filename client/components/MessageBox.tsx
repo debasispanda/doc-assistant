@@ -1,7 +1,7 @@
-import { useSession } from "~/hooks/useSession";
+import { useSessionContext } from "~/context/SessionContext";
 
-export const MessageBox = ({ sessionId }: { sessionId?: string }) => {
-  const session = useSession(sessionId);
+export const MessageBox = () => {
+  const { session } = useSessionContext();
 
   if (!session || !session.messages || session.messages.length === 0) {
     return (

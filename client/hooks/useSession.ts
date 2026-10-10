@@ -1,31 +1,46 @@
+import { useEffect, useState } from "react";
+import { fetchApi } from "~/hooks/fetchApi";
 import type { ChatSession } from "~/schema/session";
-
-const fetchSessionById = async (id?: string) => {
-  const response = await fetch(`/api/v1/sessions/${id}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch session");
-  }
-  return response.json() as Promise<ChatSession>;
-};
 
 export const useSession = (id?: string) => {
   const [session, setSession] = useState<ChatSession | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const fetchSession = async () => {
-      const sessionData = await fetchSessionById(id!);
-      setSession(sessionData);
-    };
-
     if (!id) {
       setSession(null);
+      setLoading(false);
+      setError(null);
       return;
     }
 
-    fetchSession();
+    const controller = new AbortController();
+    setSession(null);
+    setLoading(true);
+    setError(null);
+
+    fetchApi<ChatSession>(`/api/v1/sessions/${id}`, {
+      signal: controller.signal,
+    })
+      .then(setSession)
+      .catch((requestError: unknown) => {
+        if (!controller.signal.aborted) {
+          setError(
+            requestError instanceof Error
+              ? requestError
+              : new Error("Failed to fetch session"),
+          );
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      });
+
+    return () => controller.abort();
   }, [id]);
 
-  return session;
+  return { session, loading, error };
 };
-
-import { useEffect, useState } from "react";

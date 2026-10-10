@@ -1,8 +1,10 @@
 import { NavLink } from "react-router";
+import { EditIcon } from "lucide-react";
 import { useSessions } from "~/hooks/useSessions";
+import { SessionActions } from "~/components/SessionActions";
 
 export const SessionNav = () => {
-  const sessions = useSessions();
+  const { sessions, loading, error } = useSessions();
 
   return (
     <nav className="h-screen w-70 shrink-0 overflow-y-auto bg-gray-200 p-4 xl:w-100">
@@ -11,38 +13,30 @@ export const SessionNav = () => {
         <NavLink
           to="/"
           end
-          className="flex items-center gap-2 block rounded px-3 py-2 text-gray-700 hover:bg-gray-300 hover:text-gray-900 [&.active]:bg-gray-900 [&.active]:text-white"
+          className="flex items-center gap-2 block rounded px-3 py-2 text-gray-700 hover:bg-gray-300 hover:text-gray-900"
         >
-          <svg
-            className="w-6 h-6 text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
-            />
-          </svg>
+          <EditIcon />
           New Chat
         </NavLink>
       </h2>
       <ul className="list-none">
+        {loading && <li>Loading sessions...</li>}
+        {error && <li role="alert">{error.message}</li>}
         {sessions.map((session) => (
-          <li key={session.id} className="mb-2">
+          <li
+            key={session.id}
+            className="mb-2 flex items-center justify-between"
+          >
             <NavLink
               to={session.id === "/" ? "/" : `/${session.id}`}
               end
-              className="block rounded px-3 py-2 text-gray-700 hover:bg-gray-300 hover:text-gray-900 [&.active]:bg-gray-900 [&.active]:text-white"
+              className="block rounded px-3 py-2 text-gray-700 hover:bg-gray-300 hover:text-gray-900 [&.active]:bg-gray-300 [&.active]:text-gray-900"
             >
               {session.title}
             </NavLink>
+            <div>
+              <SessionActions />
+            </div>
           </li>
         ))}
       </ul>

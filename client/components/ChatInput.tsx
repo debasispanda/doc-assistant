@@ -1,11 +1,30 @@
-export const ChatInput = () => {
+import { SendHorizonal } from "lucide-react";
+import { AttachmentMenu } from "./AttachmentMenu";
+
+export const ChatInput = ({
+  onSend,
+}: {
+  onSend: (message: string) => void;
+}) => {
   return (
-    <form>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const message = (
+          e.currentTarget.elements.namedItem("chat") as HTMLTextAreaElement
+        ).value;
+        onSend(message);
+        (
+          e.currentTarget.elements.namedItem("chat") as HTMLTextAreaElement
+        ).value = "";
+      }}
+    >
       <label htmlFor="chat" className="sr-only">
         Your message
       </label>
       <div className="flex items-center px-3 py-2 rounded-base bg-neutral-secondary-soft">
-        <button
+        <AttachmentMenu />
+        {/* <button
           type="button"
           className="p-2 text-body rounded-sm cursor-pointer hover:text-heading hover:bg-neutral-tertiary-medium"
         >
@@ -54,7 +73,7 @@ export const ChatInput = () => {
             />
           </svg>
           <span className="sr-only">Upload image</span>
-        </button>
+        </button> */}
         <textarea
           id="chat"
           rows={1}
@@ -65,23 +84,7 @@ export const ChatInput = () => {
           type="submit"
           className="inline-flex justify-center p-2 text-fg-brand rounded-full cursor-pointer hover:bg-brand-softer"
         >
-          <svg
-            className="w-6 h-6 rotate-90 rtl:-rotate-90"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="m12 18-7 3 7-18 7 18-7-3Zm0 0v-5"
-            />
-          </svg>
+          <SendHorizonal />
           <span className="sr-only">Send message</span>
         </button>
       </div>
