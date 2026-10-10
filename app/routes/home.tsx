@@ -1,13 +1,13 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { ChatBox } from "../components/ChatBox";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Doc Assistant" },
+    { name: "description", content: "Welcome to Doc Assistant!" },
   ];
 }
 
-export default function Home() {
-  return <Welcome />;
+export default function Home({ params }: { params: { sessionId?: string } }) {
+  return <ChatBox sessionId={params.sessionId} />;
 }
