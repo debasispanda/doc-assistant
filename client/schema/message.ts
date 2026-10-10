@@ -2,5 +2,6 @@ export interface ChatMessage {
   id: string;
   content: string;
   type: "user" | "assistant";
-  timestamp: number;
+  sessionId: string;
+  createdAt: string;
 }

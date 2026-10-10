@@ -3,21 +3,26 @@ import { ChatInput } from "~/components/ChatInput";
 import { MessageBox } from "~/components/MessageBox";
 import { useSessionActions } from "~/hooks/useSessionActions";
 import { useSessionContext } from "~/context/SessionContext";
+import { useMessages } from "~/hooks/useMessages";
 import { useNavigate } from "react-router";
 
 export const ChatBox = () => {
-  const { session } = useSessionContext();
+  let { session } = useSessionContext();
   const { createSession } = useSessionActions();
   const navigate = useNavigate();
+  const { createMessage } = useMessages(session?.id);
 
   const handleOnMessageSend = async (message: string) => {
     if (!session) {
       console.log("No active session");
-      const res = await createSession();
-      navigate(`/${res.id}`);
+      session = await createSession(message);
+      await createMessage(message, session?.id);
+      navigate(`/${session.id}`);
       return;
     }
     console.log("Session: ", session);
+
+    await createMessage(message);
   };
 
   return (

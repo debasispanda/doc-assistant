@@ -1,13 +1,14 @@
 import datetime
+from uuid import UUID
 
-from pydantic import BaseModel
-
-from server.schema.message import ChatMessage
+from server.schema import ApiModel
 
 
-class ChatSession(BaseModel):
-    id: str
+class ChatSessionPayload(ApiModel):
     title: str
-    messages: list[ChatMessage] = []
+
+
+class ChatSessionResponse(ChatSessionPayload):
+    id: UUID
     created_at: datetime.datetime
-    updated_at: datetime.datetime
+    updated_at: datetime.datetime | None

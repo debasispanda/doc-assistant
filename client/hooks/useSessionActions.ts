@@ -2,9 +2,13 @@ import { fetchApi } from "~/hooks/fetchApi";
 import type { ChatSession } from "~/schema/session";
 
 export const useSessionActions = () => {
-  const createSession = (): Promise<ChatSession> =>
+  const createSession = (message: string): Promise<ChatSession> =>
     fetchApi<ChatSession>("/api/v1/sessions", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title: message }),
     });
 
   const deleteSession = (sessionId: string): Promise<void> =>

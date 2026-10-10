@@ -12,3 +12,7 @@ __pycache__/
 *.pyo
 *.pyd
 venv/
+
+# Database
+*.sqlite3
+*.db
