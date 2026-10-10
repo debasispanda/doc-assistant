@@ -18,6 +18,7 @@ export const useSession = (id?: string) => {
     };
 
     if (!id) {
+      setSession(null);
       return;
     }
 
