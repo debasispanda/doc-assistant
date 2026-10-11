@@ -42,6 +42,27 @@ export const useMessages = (id?: string) => {
     return () => controller.abort();
   }, [id]);
 
+  useEffect(() => {
+    if (!id) return;
+
+    const eventSource = new EventSource(
+      `/api/v1/messages/stream?session_id=${id}`,
+    );
+
+    eventSource.onmessage = (event) => {
+      const newMessage: ChatMessage = JSON.parse(event.data);
+      setMessages((prev) => [...prev, newMessage]);
+    };
+
+    eventSource.onerror = () => {
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [id]);
+
   const createMessage = (
     message: string,
     sessionId?: string | undefined,

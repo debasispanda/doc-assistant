@@ -1,10 +1,11 @@
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException
-from sqlmodel import col, select
+from sqlmodel import col, select, delete
 
 from server.db import SessionDep
 from server.model.session import ChatSession
+from server.model.message import ChatMessage
 from server.schema.session import ChatSessionPayload, ChatSessionResponse
 
 router = APIRouter()
@@ -37,3 +38,17 @@ def get_chat_session(session_id: UUID, session: SessionDep) -> ChatSessionRespon
         raise HTTPException(status_code=404, detail="Chat session not found")
 
     return ChatSessionResponse.model_validate(chat_session)
+
+
+@router.delete("/sessions/{session_id}")
+def delete_chat_session(session_id: UUID, session: SessionDep) -> None:
+    chat_session = session.get(ChatSession, session_id)
+
+    if not chat_session:
+        raise HTTPException(status_code=404, detail="Chat session not found")
+
+    # Optionally, delete related chat messages if cascading is not set up in the database
+    session.exec(delete(ChatMessage).where(col(ChatMessage.session_id) == session_id))
+
+    session.delete(chat_session)
+    session.commit()

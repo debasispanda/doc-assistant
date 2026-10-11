@@ -33,9 +33,7 @@ export const ChatBox = () => {
         <div className="flex-1 flex overflow-y-auto mb-4">
           <MessageBox />
         </div>
-        <div className="border border-gray-300 rounded p-4">
-          <ChatInput onSend={handleOnMessageSend} />
-        </div>
+        <ChatInput onSend={handleOnMessageSend} />
       </div>
     </div>
   );

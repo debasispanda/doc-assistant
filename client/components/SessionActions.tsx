@@ -17,7 +17,17 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 
-export function SessionActions() {
+interface SessionActionsProps {
+  onRename?: () => void;
+  onShare?: () => void;
+  onDelete?: () => void;
+}
+
+export function SessionActions({
+  onRename,
+  onShare,
+  onDelete,
+}: SessionActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -29,18 +39,18 @@ export function SessionActions() {
       />
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={onRename}>
             <PencilIcon />
             Rename
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={onShare}>
             <ShareIcon />
             Share
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem variant="destructive">
+          <DropdownMenuItem variant="destructive" onClick={onDelete}>
             <TrashIcon />
             Delete
           </DropdownMenuItem>

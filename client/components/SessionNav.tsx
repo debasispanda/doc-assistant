@@ -2,9 +2,15 @@ import { NavLink } from "react-router";
 import { EditIcon } from "lucide-react";
 import { useSessions } from "~/hooks/useSessions";
 import { SessionActions } from "~/components/SessionActions";
+import { useSessionActions } from "~/hooks/useSessionActions";
 
 export const SessionNav = () => {
   const { sessions, loading, error } = useSessions();
+  const { deleteSession } = useSessionActions();
+
+  const handleDelete = (sessionId: string) => {
+    deleteSession(sessionId);
+  };
 
   return (
     <nav className="h-screen w-70 shrink-0 overflow-y-auto bg-gray-200 p-4 xl:w-100">
@@ -35,7 +41,7 @@ export const SessionNav = () => {
               {session.title}
             </NavLink>
             <div>
-              <SessionActions />
+              <SessionActions onDelete={() => handleDelete(session.id)} />
             </div>
           </li>
         ))}

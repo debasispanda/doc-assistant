@@ -17,7 +17,7 @@ export function AttachmentMenu() {
       <DropdownMenuTrigger
         render={
           <Button variant="ghost">
-            <PlusIcon />
+            <PlusIcon className="font-size-30" />
           </Button>
         }
       />
